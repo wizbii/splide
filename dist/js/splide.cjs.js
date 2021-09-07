@@ -2098,7 +2098,7 @@ var Slide = function Slide(Splide, index, realIndex, slide) {
  */
 
 
-var UID_NAME = 'uid';
+var UID_NAME = "uid";
 /**
  * The component for main elements.
  *
@@ -2135,9 +2135,11 @@ var Elements = function Elements(Splide, Components) {
    */
 
   if (!root.id) {
-    window.splide = window.splide || {};
-    var uid = window.splide[UID_NAME] || 0;
-    window.splide[UID_NAME] = ++uid;
+    var _window = typeof window === "object" ? window : global;
+
+    _window.splide = _window.splide || {};
+    var uid = _window.splide[UID_NAME] || 0;
+    _window.splide[UID_NAME] = ++uid;
     root.id = "splide" + pad(uid);
   }
   /**
@@ -2156,11 +2158,11 @@ var Elements = function Elements(Splide, Components) {
       var _this4 = this;
 
       this.init();
-      Splide.on('refresh', function () {
+      Splide.on("refresh", function () {
         _this4.destroy();
 
         _this4.init();
-      }).on('updated', function () {
+      }).on("updated", function () {
         removeClass(root, getClasses());
         addClass(root, getClasses());
       });
@@ -2254,7 +2256,7 @@ var Elements = function Elements(Splide, Components) {
      * @param {Function}    callback - Called right after the slide is added to the DOM tree.
      */
     add: function add(slide, index, callback) {
-      if (typeof slide === 'string') {
+      if (typeof slide === "string") {
         slide = domify(slide);
       }
 
@@ -2262,7 +2264,7 @@ var Elements = function Elements(Splide, Components) {
         var ref = this.slides[index]; // This will be removed in mount() of a Slide component.
 
         applyStyle(slide, {
-          display: 'none'
+          display: "none"
         });
 
         if (ref) {
@@ -2325,7 +2327,7 @@ var Elements = function Elements(Splide, Components) {
     Elements.slider = child(root, classes.slider);
     Elements.track = find(root, "." + classes.track);
     Elements.list = child(Elements.track, classes.list);
-    exist(Elements.track && Elements.list, 'Track or list was not found.');
+    exist(Elements.track && Elements.list, "Track or list was not found.");
     Elements.slides = children(Elements.list, classes.slide);
     var arrows = findParts(classes.arrows);
     Elements.arrows = {
@@ -2347,7 +2349,7 @@ var Elements = function Elements(Splide, Components) {
   function getClasses() {
     var rootClass = classes.root;
     var options = Splide.options;
-    return [rootClass + "--" + options.type, rootClass + "--" + options.direction, options.drag ? rootClass + "--draggable" : '', options.isNavigation ? rootClass + "--nav" : '', STATUS_CLASSES.active];
+    return [rootClass + "--" + options.type, rootClass + "--" + options.direction, options.drag ? rootClass + "--draggable" : "", options.isNavigation ? rootClass + "--nav" : "", STATUS_CLASSES.active];
   }
   /**
    * Find parts only from children of the root or track.
@@ -3541,8 +3543,8 @@ function throttle(func, wait) {
 
 
 function createInterval(callback, interval, progress) {
-  var _window = window,
-      requestAnimationFrame = _window.requestAnimationFrame;
+  var _window2 = window,
+      requestAnimationFrame = _window2.requestAnimationFrame;
   var start,
       elapse,
       rate,

@@ -5,7 +5,7 @@
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-import Slide from './slide';
+import Slide from "./slide";
 import {
 	find,
 	addClass,
@@ -18,19 +18,17 @@ import {
 	domify,
 	applyStyle,
 	loaded,
-} from '../../utils/dom';
-import { exist } from '../../utils/error';
+} from "../../utils/dom";
+import { exist } from "../../utils/error";
 import { pad } from "../../utils/utils";
 import { STATUS_CLASSES } from "../../constants/classes";
-
 
 /**
  * The property name for UID stored in a window object.
  *
  * @type {string}
  */
-const UID_NAME = 'uid';
-
+const UID_NAME = "uid";
 
 /**
  * The component for main elements.
@@ -40,7 +38,7 @@ const UID_NAME = 'uid';
  *
  * @return {Object} - The component object.
  */
-export default ( Splide, Components ) => {
+export default (Splide, Components) => {
 	/**
 	 * Hold the root element.
 	 *
@@ -66,11 +64,12 @@ export default ( Splide, Components ) => {
 	 * Assign unique ID to the root element if it doesn't have the one.
 	 * Note that IE doesn't support padStart() to fill the uid by 0.
 	 */
-	if ( ! root.id ) {
-		window.splide = window.splide || {};
-		let uid = window.splide[ UID_NAME ] || 0;
-		window.splide[ UID_NAME ] = ++uid;
-		root.id = `splide${ pad( uid ) }`;
+	if (!root.id) {
+		const _window = typeof window === "object" ? window : global;
+		_window.splide = _window.splide || {};
+		let uid = _window.splide[UID_NAME] || 0;
+		_window.splide[UID_NAME] = ++uid;
+		root.id = `splide${pad(uid)}`;
 	}
 
 	/**
@@ -86,23 +85,24 @@ export default ( Splide, Components ) => {
 		mount() {
 			this.init();
 
-			Splide
-				.on( 'refresh', () => {
-					this.destroy();
-					this.init();
-				} ).on( 'updated', () => {
-					removeClass( root, getClasses() );
-					addClass( root, getClasses() );
-				} );
+			Splide.on("refresh", () => {
+				this.destroy();
+				this.init();
+			}).on("updated", () => {
+				removeClass(root, getClasses());
+				addClass(root, getClasses());
+			});
 		},
 
 		/**
 		 * Destroy.
 		 */
 		destroy() {
-			Slides.forEach( Slide => { Slide.destroy() } );
+			Slides.forEach((Slide) => {
+				Slide.destroy();
+			});
 			Slides = [];
-			removeClass( root, getClasses() );
+			removeClass(root, getClasses());
 		},
 
 		/**
@@ -110,11 +110,11 @@ export default ( Splide, Components ) => {
 		 */
 		init() {
 			collect();
-			addClass( root, getClasses() );
+			addClass(root, getClasses());
 
-			this.slides.forEach( ( slide, index ) => {
-				this.register( slide, index, -1 );
-			} );
+			this.slides.forEach((slide, index) => {
+				this.register(slide, index, -1);
+			});
 		},
 
 		/**
@@ -124,10 +124,10 @@ export default ( Splide, Components ) => {
 		 * @param {number}  index     - A unique index. This can be negative.
 		 * @param {number}  realIndex - A real index for clones. Set -1 for real slides.
 		 */
-		register( slide, index, realIndex ) {
-			const SlideObject = Slide( Splide, index, realIndex, slide );
+		register(slide, index, realIndex) {
+			const SlideObject = Slide(Splide, index, realIndex, slide);
 			SlideObject.mount();
-			Slides.push( SlideObject );
+			Slides.push(SlideObject);
 		},
 
 		/**
@@ -136,8 +136,8 @@ export default ( Splide, Components ) => {
 		 *
 		 * @return {Object|undefined} - A Slide object if available. Undefined if not.
 		 */
-		getSlide( index ) {
-			return Slides.filter( Slide => Slide.index === index )[0];
+		getSlide(index) {
+			return Slides.filter((Slide) => Slide.index === index)[0];
 		},
 
 		/**
@@ -147,8 +147,8 @@ export default ( Splide, Components ) => {
 		 *
 		 * @return {Object[]} - Slide objects.
 		 */
-		getSlides( includeClones ) {
-			return includeClones ? Slides : Slides.filter( Slide => ! Slide.isClone );
+		getSlides(includeClones) {
+			return includeClones ? Slides : Slides.filter((Slide) => !Slide.isClone);
 		},
 
 		/**
@@ -158,12 +158,12 @@ export default ( Splide, Components ) => {
 		 *
 		 * @return {Object[]} - An array containing Slide objects.
 		 */
-		getSlidesByPage( page ) {
-			const idx     = Components.Controller.toIndex( page );
+		getSlidesByPage(page) {
+			const idx = Components.Controller.toIndex(page);
 			const options = Splide.options;
-			const max     = options.focus !== false ? 1 : options.perPage;
+			const max = options.focus !== false ? 1 : options.perPage;
 
-			return Slides.filter( ( { index } ) => idx <= index && index < idx + max );
+			return Slides.filter(({ index }) => idx <= index && index < idx + max);
 		},
 
 		/**
@@ -174,26 +174,28 @@ export default ( Splide, Components ) => {
 		 * @param {number}      index    - A slide will be added at the position.
 		 * @param {Function}    callback - Called right after the slide is added to the DOM tree.
 		 */
-		add( slide, index, callback ) {
-			if ( typeof slide === 'string' ) {
-				slide = domify( slide );
+		add(slide, index, callback) {
+			if (typeof slide === "string") {
+				slide = domify(slide);
 			}
 
-			if ( slide instanceof Element ) {
-				const ref = this.slides[ index ];
+			if (slide instanceof Element) {
+				const ref = this.slides[index];
 
 				// This will be removed in mount() of a Slide component.
-				applyStyle( slide, { display: 'none' } );
+				applyStyle(slide, { display: "none" });
 
-				if ( ref ) {
-					before( slide, ref );
-					this.slides.splice( index, 0, slide );
+				if (ref) {
+					before(slide, ref);
+					this.slides.splice(index, 0, slide);
 				} else {
-					append( this.list, slide );
-					this.slides.push( slide );
+					append(this.list, slide);
+					this.slides.push(slide);
 				}
 
-				loaded( slide, () => { callback && callback( slide ) } );
+				loaded(slide, () => {
+					callback && callback(slide);
+				});
 			}
 		},
 
@@ -203,8 +205,8 @@ export default ( Splide, Components ) => {
 		 *
 		 * @param index - Slide index.
 		 */
-		remove( index ) {
-			remove( this.slides.splice( index, 1 )[0] );
+		remove(index) {
+			remove(this.slides.splice(index, 1)[0]);
 		},
 
 		/**
@@ -212,8 +214,8 @@ export default ( Splide, Components ) => {
 		 *
 		 * @param {Function} callback - A callback function. The first argument will be the Slide object.
 		 */
-		each( callback ) {
-			Slides.forEach( callback );
+		each(callback) {
+			Slides.forEach(callback);
 		},
 
 		/**
@@ -239,27 +241,27 @@ export default ( Splide, Components ) => {
 	 * Collect elements.
 	 */
 	function collect() {
-		Elements.slider = child( root, classes.slider );
-		Elements.track  = find( root, `.${ classes.track }` );
-		Elements.list   = child( Elements.track, classes.list );
+		Elements.slider = child(root, classes.slider);
+		Elements.track = find(root, `.${classes.track}`);
+		Elements.list = child(Elements.track, classes.list);
 
-		exist( Elements.track && Elements.list, 'Track or list was not found.' );
+		exist(Elements.track && Elements.list, "Track or list was not found.");
 
-		Elements.slides = children( Elements.list, classes.slide );
+		Elements.slides = children(Elements.list, classes.slide);
 
-		const arrows = findParts( classes.arrows );
+		const arrows = findParts(classes.arrows);
 		Elements.arrows = {
-			prev: find( arrows, `.${ classes.prev }` ),
-			next: find( arrows, `.${ classes.next }` ),
+			prev: find(arrows, `.${classes.prev}`),
+			next: find(arrows, `.${classes.next}`),
 		};
 
-		const autoplay = findParts( classes.autoplay );
-		Elements.bar   = find( findParts( classes.progress ), `.${ classes.bar }` );
-		Elements.play  = find( autoplay, `.${ classes.play }` );
-		Elements.pause = find( autoplay, `.${ classes.pause }` );
+		const autoplay = findParts(classes.autoplay);
+		Elements.bar = find(findParts(classes.progress), `.${classes.bar}`);
+		Elements.play = find(autoplay, `.${classes.play}`);
+		Elements.pause = find(autoplay, `.${classes.pause}`);
 
-		Elements.track.id = Elements.track.id || `${ root.id }-track`;
-		Elements.list.id  = Elements.list.id || `${ root.id }-list`;
+		Elements.track.id = Elements.track.id || `${root.id}-track`;
+		Elements.list.id = Elements.list.id || `${root.id}-list`;
 	}
 
 	/**
@@ -267,13 +269,13 @@ export default ( Splide, Components ) => {
 	 */
 	function getClasses() {
 		const rootClass = classes.root;
-		const options   = Splide.options;
+		const options = Splide.options;
 
 		return [
-			`${ rootClass }--${ options.type }`,
-			`${ rootClass }--${ options.direction }`,
-			options.drag ? `${ rootClass }--draggable` : '',
-			options.isNavigation ? `${ rootClass }--nav` : '',
+			`${rootClass}--${options.type}`,
+			`${rootClass}--${options.direction}`,
+			options.drag ? `${rootClass}--draggable` : "",
+			options.isNavigation ? `${rootClass}--nav` : "",
 			STATUS_CLASSES.active,
 		];
 	}
@@ -283,9 +285,9 @@ export default ( Splide, Components ) => {
 	 *
 	 * @return {Element} - A found element or undefined.
 	 */
-	function findParts( className ) {
-		return child( root, className ) || child( Elements.slider, className );
+	function findParts(className) {
+		return child(root, className) || child(Elements.slider, className);
 	}
 
 	return Elements;
-}
+};
