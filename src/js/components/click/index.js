@@ -5,7 +5,6 @@
  * @copyright Naotoshi Fujita. All rights reserved.
  */
 
-
 /**
  * The component for handling a click event.
  * Click should be disabled during drag/swipe.
@@ -15,7 +14,7 @@
  *
  * @return {Object} - The component object.
  */
-export default ( Splide, Components ) => {
+export default (Splide, Components) => {
 	/**
 	 * Whether click is disabled or not.
 	 *
@@ -40,13 +39,16 @@ export default ( Splide, Components ) => {
 		 * Called when the component is mounted.
 		 */
 		mount() {
-			Splide
-				.on( 'click', onClick, Components.Elements.track, { capture: true } )
-				.on( 'drag', () => { disabled = true } )
-				.on( 'dragged', () => {
+			Splide.on("click", onClick, Components.Elements.track, { capture: true })
+				.on("drag", () => {
+					disabled = true;
+				})
+				.on("dragged", () => {
 					// Make sure the flag is released after the click event is fired.
-					setTimeout( () => { disabled = false } );
-				} );
+					setTimeout(() => {
+						disabled = false;
+					});
+				});
 		},
 	};
 
@@ -55,8 +57,8 @@ export default ( Splide, Components ) => {
 	 *
 	 * @param {Event} e - A click event.
 	 */
-	function onClick( e ) {
-		if ( disabled ) {
+	function onClick(e) {
+		if (disabled) {
 			e.preventDefault();
 			e.stopPropagation();
 			e.stopImmediatePropagation();
@@ -64,4 +66,4 @@ export default ( Splide, Components ) => {
 	}
 
 	return Click;
-}
+};

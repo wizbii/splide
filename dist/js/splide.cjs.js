@@ -4096,11 +4096,11 @@ var Click = function Click(Splide, Components) {
      * Called when the component is mounted.
      */
     mount: function mount() {
-      Splide.on('click', onClick, Components.Elements.track, {
+      Splide.on("click", onClick, Components.Elements.track, {
         capture: true
-      }).on('drag', function () {
+      }).on("drag", function () {
         disabled = true;
-      }).on('dragged', function () {
+      }).on("dragged", function () {
         // Make sure the flag is released after the click event is fired.
         setTimeout(function () {
           disabled = false;
@@ -5062,25 +5062,25 @@ var TAB_INDEX = 'tabindex';
 
 var KEY_MAP = {
   ltr: {
-    ArrowLeft: '<',
-    ArrowRight: '>',
+    ArrowLeft: "<",
+    ArrowRight: ">",
     // For IE.
-    Left: '<',
-    Right: '>'
+    Left: "<",
+    Right: ">"
   },
   rtl: {
-    ArrowLeft: '>',
-    ArrowRight: '<',
+    ArrowLeft: ">",
+    ArrowRight: "<",
     // For IE.
-    Left: '>',
-    Right: '<'
+    Left: ">",
+    Right: "<"
   },
   ttb: {
-    ArrowUp: '<',
-    ArrowDown: '>',
+    ArrowUp: "<",
+    ArrowDown: ">",
     // For IE.
-    Up: '<',
-    Down: '>'
+    Up: "<",
+    Down: ">"
   }
 };
 /**
@@ -5103,26 +5103,26 @@ var Keyboard = function Keyboard(Splide) {
      * Called when the component is mounted.
      */
     mount: function mount() {
-      Splide.on('mounted updated', function () {
+      Splide.on("mounted updated", function () {
         var options = Splide.options;
         var root = Splide.root;
         var map = KEY_MAP[options.direction];
         var keyboard = options.keyboard;
 
         if (target) {
-          Splide.off('keydown', target);
+          Splide.off("keydown", target);
           removeAttribute(root, TAB_INDEX);
         }
 
         if (keyboard) {
-          if (keyboard === 'focused') {
+          if (keyboard === "focused") {
             target = root;
             setAttribute(root, TAB_INDEX, 0);
           } else {
             target = document;
           }
 
-          Splide.on('keydown', function (e) {
+          Splide.on("keydown", function (e) {
             if (map[e.key]) {
               Splide.go(map[e.key]);
             }

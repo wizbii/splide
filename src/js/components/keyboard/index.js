@@ -15,28 +15,27 @@ import { TAB_INDEX } from "../../constants/a11y";
  */
 const KEY_MAP = {
 	ltr: {
-		ArrowLeft : '<',
-		ArrowRight: '>',
+		ArrowLeft: "<",
+		ArrowRight: ">",
 		// For IE.
-		Left : '<',
-		Right: '>',
+		Left: "<",
+		Right: ">",
 	},
 	rtl: {
-		ArrowLeft : '>',
-		ArrowRight: '<',
+		ArrowLeft: ">",
+		ArrowRight: "<",
 		// For IE.
-		Left : '>',
-		Right: '<',
+		Left: ">",
+		Right: "<",
 	},
 	ttb: {
-		ArrowUp  : '<',
-		ArrowDown: '>',
+		ArrowUp: "<",
+		ArrowDown: ">",
 		// For IE.
-		Up  : '<',
-		Down: '>',
+		Up: "<",
+		Down: ">",
 	},
 };
-
 
 /**
  * The component for controlling slides via keyboard.
@@ -45,7 +44,7 @@ const KEY_MAP = {
  *
  * @return {Object} - The component object.
  */
-export default ( Splide ) => {
+export default (Splide) => {
 	/**
 	 * Hold the target element.
 	 *
@@ -58,32 +57,36 @@ export default ( Splide ) => {
 		 * Called when the component is mounted.
 		 */
 		mount() {
-			Splide.on( 'mounted updated', () => {
-				const options  = Splide.options;
-				const root     = Splide.root;
-				const map      = KEY_MAP[ options.direction ];
+			Splide.on("mounted updated", () => {
+				const options = Splide.options;
+				const root = Splide.root;
+				const map = KEY_MAP[options.direction];
 				const keyboard = options.keyboard;
 
-				if ( target ) {
-					Splide.off( 'keydown', target );
-					removeAttribute( root, TAB_INDEX );
+				if (target) {
+					Splide.off("keydown", target);
+					removeAttribute(root, TAB_INDEX);
 				}
 
-				if ( keyboard ) {
-					if ( keyboard === 'focused' ) {
+				if (keyboard) {
+					if (keyboard === "focused") {
 						target = root;
-						setAttribute( root, TAB_INDEX, 0 );
+						setAttribute(root, TAB_INDEX, 0);
 					} else {
 						target = document;
 					}
 
-					Splide.on( 'keydown', e => {
-						if ( map[ e.key ] ) {
-							Splide.go( map[ e.key ] );
-						}
-					}, target );
+					Splide.on(
+						"keydown",
+						(e) => {
+							if (map[e.key]) {
+								Splide.go(map[e.key]);
+							}
+						},
+						target
+					);
 				}
-			} );
+			});
 		},
 	};
-}
+};
